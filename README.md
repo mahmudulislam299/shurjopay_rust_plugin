@@ -43,11 +43,14 @@ sp-plugin-rust-test = "0.1.0"
 ```toml
 [dependencies]
 sp-plugin-rust-test = "0.1.0"
+open = "3.0.3"
 ```
 
 ### step:2  Import Crate into your project
 ```
-use Shurjopay::ShurjopayPlugin;
+use sp_plugin_rust_test::Shurjopay::ShurjopayPlugin;
+use open;
+use std::io;
 ```
 ### step:3  creating a new instance of Shurjopayplugin
 ```

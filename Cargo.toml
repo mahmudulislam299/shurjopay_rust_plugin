@@ -1,11 +1,11 @@
 [package]
 name = "sp-plugin-rust-test"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Shakil Anwar <shakil7531@gmail.com>", "Mahmudul Islam <mahmudulislam299@gmail.com>"]
 categories = ["encoding", "parser-implementations", "no-std"]
 description = "Rust plugin for for quick integration of shurjopay API"
-documentation = "https://github.com/mahmudulislam299/sp-plugin-rust-test"
+documentation = "https://docs.rs/sp-plugin-rust-testb/0.2.0/sp-plugin-rust-test"
 keywords = ["shurjopay", "fintech", "plugin"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/mahmudulislam299/sp-plugin-rust-test"
