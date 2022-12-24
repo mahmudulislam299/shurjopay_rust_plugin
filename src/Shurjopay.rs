@@ -39,7 +39,7 @@ extern crate reqwest;
 use reqwest::header::CONTENT_TYPE;
 
 /// This module handles http request verifications
-use super::ShurjopayClient;//::{HttpResponse,is_response_valid};
+use super::shurjopay_client;//::{HttpResponse,is_response_valid};
 
 
 /// Shurjopay token authorization data structure
@@ -459,7 +459,7 @@ impl ShurjopayPlugin{
                                 .send();
 
                 // Checking if respons is valid or not
-                if let Some(responseData) = ShurjopayClient::is_response_valid(response) {
+                if let Some(responseData) = shurjopay_client::is_response_valid(response) {
   
                     // Mapping JSON string to structure
 
@@ -516,7 +516,7 @@ impl ShurjopayPlugin{
                                 .send();
 
                 // Checking if respons is valid or not
-                if let Some(responseData) = ShurjopayClient::is_response_valid(response) {
+                if let Some(responseData) = shurjopay_client::is_response_valid(response) {
                     // println!("Checkout Response: {:?}", responseData);
                     // Mapping JSON string to structure
                     let checkout_json_option: Option<SpCheckoutResponse> = unwrap_json(&responseData);
@@ -602,7 +602,7 @@ impl ShurjopayPlugin{
                                 .json(&body)
                                 .send();
                 // Checking if respons is valid or not
-                if let Some(responseData) = ShurjopayClient::is_response_valid(response) 
+                if let Some(responseData) = shurjopay_client::is_response_valid(response) 
                 {
                     let auth_json_option: Option<SpAuthToken> = unwrap_json(&responseData);
                     // Checking JSON structure is matched or not
@@ -811,7 +811,7 @@ impl SpVerifyResponse2
 
 
 /// This function unwraps `JSON` `String` into specified `<T>` data structure
-pub fn unwrap_json<'a, T>(response_data: &'a ShurjopayClient::HttpResponse) -> Option<T> 
+pub fn unwrap_json<'a, T>(response_data: &'a shurjopay_client::HttpResponse) -> Option<T> 
 where T: Deserialize<'a>+ Clone+ std::fmt::Debug {
     if response_data.http_code == 200
     {

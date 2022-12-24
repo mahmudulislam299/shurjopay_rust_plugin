@@ -17,8 +17,8 @@
 //! 
 //! [shurjopay]: crate::Shurjopay
 
-pub mod Shurjopay;
-pub mod ShurjopayClient;
+pub mod shurjopay;
+pub mod shurjopay_client;
 
 
 
