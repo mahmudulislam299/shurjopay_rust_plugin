@@ -216,7 +216,7 @@ impl Default for SpConfig
             sp_pass: "pyyk97hu&6u6".to_string(), 
             default_return_url: "https://sandbox.shurjopayment.com/response".to_string(), 
             default_cancel_url: "https://sandbox.shurjopayment.com/response".to_string(), 
-            default_client_ip: "192.168.0.99".to_string() ,
+            default_client_ip: "0.0.0.0".to_string() ,
         }    
     }
 }
@@ -303,7 +303,6 @@ impl ShurjopayPlugin {
         payment_status_end_point:String,
         default_return_url:String,
         default_cancel_url:String,
-        default_client_ip:String,
     )
     {
         let sp_config = SpConfig
@@ -317,7 +316,7 @@ impl ShurjopayPlugin {
             payment_status_end_point,
             default_return_url,
             default_cancel_url,
-            default_client_ip,
+            default_client_ip:self.get_client_ip_address().unwrap(),
         };
         self.config  = Some(sp_config);
     }
@@ -329,6 +328,17 @@ impl ShurjopayPlugin {
     {
         if check_env_file_availble()
         {
+            
+            let ip_address_check = self.get_client_ip_address();
+            
+            let mut ip_address = "0.0.0.0".to_string();
+            
+            if ip_address_check.is_some()
+            {
+                ip_address = ip_address_check.unwrap();
+            }
+
+
             let sp_config = SpConfig
             {
                 post_default_address: std::env::var("POST_DEFAULT_ADDRESS").unwrap(),
@@ -340,10 +350,12 @@ impl ShurjopayPlugin {
                 sp_pass: std::env::var("SP_PASS").unwrap(),
                 default_return_url: std::env::var("DEFAULT_RETURN_URL").unwrap(),
                 default_cancel_url: std::env::var("DEFAULT_CANCEL_URL").unwrap(),
-                default_client_ip: std::env::var("DEFAULT_CLIENT_IP").unwrap(),
+                // default_client_ip: std::env::var("DEFAULT_CLIENT_IP").unwrap(),
+                default_client_ip: ip_address ,
             };
     
             self.config  = Some(sp_config);
+            println!("configuration is set from .env file");
         }
         else 
         {
@@ -386,6 +398,7 @@ impl ShurjopayPlugin {
           customer_post_code,
           client_ip:self.config.clone().unwrap().default_client_ip,
         };
+        // println!("make payment client ip address: {}", sp_checkout.clone().client_ip);
         return sp_checkout;
     }
 
@@ -667,13 +680,14 @@ impl ShurjopayPlugin{
         }
     }  
 
-     /// This function gets IP address of the system
+     /// This function gets IP address of the client
     /// It returns `Option<String>`
-    pub fn get_ip_address(&mut self) -> Option<String> 
+    pub fn get_client_ip_address(&mut self) -> Option<String> 
     {
         let sp_ins = self.clone();
-        if let Some(spay) = sp_ins.config {
-            if let Some(client) = sp_ins.client{
+
+            if let Some(client) = sp_ins.client
+            {
                 let url = format!("https://api.ipify.org/?format=json");
 
                 // Making HTTP request
@@ -683,8 +697,8 @@ impl ShurjopayPlugin{
                 // Checking if respons is valid or not
                 if let Some(responseData) = shurjopay_client::is_response_valid(response) 
                 {
-                    println!("response is valid");
-                    println!("{:#?}", responseData);
+                    // println!("response is valid");
+                    // println!("{:#?}", responseData);
 
                     let result:Result<IpAddress> = serde_json::from_str(responseData.http_body.as_str());
                     // println!("ip address: {:#?}", result.clone().unwrap().ip);
@@ -696,11 +710,6 @@ impl ShurjopayPlugin{
             {
                 println!("Shurjopay http client is not set yet!");
             }            
-        } 
-        else 
-        {
-            println!("Shurjopay Configuration is not set yet!");
-        }
         return None;
     }
 
