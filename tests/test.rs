@@ -135,18 +135,6 @@ mod tests {
 
 
 
-     #[test]
-     fn verify_get_client_ip_address()
-     {
-        let mut sp_instance = ShurjopayPlugin::new();
-        sp_instance.set_default_config();
-        let p = sp_instance.get_client_ip_address();
-        println!("check client ip address: {}", p.unwrap());
-        let s = 10;
-        assert_eq!(s,10);
-        
-
-     }
 
     
 }
