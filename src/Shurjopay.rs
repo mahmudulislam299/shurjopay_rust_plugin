@@ -173,6 +173,15 @@ pub struct SpVerifyResponse2
     message: Option<String>
 }
 
+
+/// ip address structure
+/// This structure implements `Serialize`, `Deserialize`, `Debug` and `Clone` functions
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct IpAddress
+{
+    ip:String
+}
+
 /// Shurjopay configuration data structure
 /// This structure should be declared as non mutable 
 /// and ownership shouldn't be transferred to any other instance
@@ -205,8 +214,8 @@ impl Default for SpConfig
             payment_status_end_point: "/api/payment-status".to_string(), 
             sp_user: "sp_sandbox".to_string(), 
             sp_pass: "pyyk97hu&6u6".to_string(), 
-            default_return_url: "https://www.sandbox.shurjopayment.com/response".to_string(), 
-            default_cancel_url: "https://www.sandbox.shurjopayment.com/response".to_string(), 
+            default_return_url: "https://sandbox.shurjopayment.com/response".to_string(), 
+            default_cancel_url: "https://sandbox.shurjopayment.com/response".to_string(), 
             default_client_ip: "192.168.0.99".to_string() ,
         }    
     }
@@ -657,6 +666,44 @@ impl ShurjopayPlugin{
             }
         }
     }  
+
+     /// This function gets IP address of the system
+    /// It returns `Option<String>`
+    pub fn get_ip_address(&mut self) -> Option<String> 
+    {
+        let sp_ins = self.clone();
+        if let Some(spay) = sp_ins.config {
+            if let Some(client) = sp_ins.client{
+                let url = format!("https://api.ipify.org/?format=json");
+
+                // Making HTTP request
+                let response = client.get(url.as_str())
+                                .send();
+
+                // Checking if respons is valid or not
+                if let Some(responseData) = shurjopay_client::is_response_valid(response) 
+                {
+                    println!("response is valid");
+                    println!("{:#?}", responseData);
+
+                    let result:Result<IpAddress> = serde_json::from_str(responseData.http_body.as_str());
+                    // println!("ip address: {:#?}", result.clone().unwrap().ip);
+                    return Some(result.unwrap().ip);
+
+                }
+            } 
+            else 
+            {
+                println!("Shurjopay http client is not set yet!");
+            }            
+        } 
+        else 
+        {
+            println!("Shurjopay Configuration is not set yet!");
+        }
+        return None;
+    }
+
 }
 
 
