@@ -3,7 +3,7 @@ mod tests {
 
     use sp_plugin_rust_test::shurjopay::ShurjopayPlugin;
     use assert_str::assert_str_eq;
-    use webbrowser;
+    // use webbrowser;
 
     #[test]
     fn set_config_from_env_file_test() {
@@ -103,12 +103,12 @@ mod tests {
 
         if let Some(checkout_url) = sp_instance.make_payment_no_auto_redirect(payment_req_obj) {
             
-            if webbrowser::open(checkout_url.clone().as_str()).is_ok() {
-                println!("Opened '{}' successfully.", checkout_url.clone())
-            }
-            else {
-                println!("An error occurred when opening {}", checkout_url);
-            }
+            // if webbrowser::open(checkout_url.clone().as_str()).is_ok() {
+            //     println!("Opened '{}' successfully.", checkout_url.clone())
+            // }
+            // else {
+            //     println!("An error occurred when opening {}", checkout_url);
+            // }
         }
     }
 
