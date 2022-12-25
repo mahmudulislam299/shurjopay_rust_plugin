@@ -10,11 +10,11 @@
 #![allow(dead_code, unused_variables, non_snake_case, non_camel_case_types)]
 
 /// Standard library to save `key` and `value` as Hashmap
-extern crate std;
+// extern crate std;
 use std::collections::HashMap;
 
 /// The `chrono` crate is included to calculate timeout using datetime 
-extern crate chrono;
+// extern crate chrono;
 use chrono::{NaiveDateTime, Duration, Timelike, Utc};
 // use chrono::format::{ParseError, format};
 
@@ -22,7 +22,7 @@ use chrono::{NaiveDateTime, Duration, Timelike, Utc};
 use dotenv::dotenv;
 
 /// The `serde` crate is included to serialize structure to json and deserialize json to structure 
-extern crate serde;
+// extern crate serde;
 use serde::{Deserialize, Serialize};
 // use serde_json::{Result, to_string};
 use serde_json:: Result;
@@ -32,11 +32,11 @@ use serde_json:: Result;
 // use log::{debug, error, info, warn};
 
 /// The `reqwest` crate is included to make http request
-extern crate reqwest;
-// use reqwest::blocking::Client;
+// extern crate reqwest;
+use reqwest::blocking::Client;
 // use reqwest::Error;
 // use reqwest::header::{HeaderMap, HeaderValue, USER_AGENT, CONTENT_TYPE};
-use reqwest::header::CONTENT_TYPE;
+use reqwest::header:: CONTENT_TYPE;
 
 /// This module handles http request verifications
 use super::shurjopay_client;//::{HttpResponse,is_response_valid};
@@ -233,7 +233,7 @@ impl Default for SpConfig
 /// 
 #[derive(Debug, Clone)]
 pub struct ShurjopayPlugin{
-    client: Option<reqwest::blocking::Client>,
+    client: Option<Client>,
     pub config: Option<SpConfig>,
     pub auth_token: Option<SpAuthToken>,
     pub checkout_response: Option<SpCheckoutResponse>,
@@ -254,7 +254,7 @@ impl ShurjopayPlugin {
     /// This is a constructor to initiate `null` instance of `ShurjopayPlugin`
     /// returns `ShurjopayPlugin`
     pub fn new() -> Self {
-        let http_client = reqwest::blocking::Client::new();
+        let http_client = Client::new();
         ShurjopayPlugin{            
             client : Some(http_client),
             config : None,
