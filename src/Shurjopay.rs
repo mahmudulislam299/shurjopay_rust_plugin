@@ -4,7 +4,7 @@
 //! 
 //! Features:
 //! - Automatic handles html errors 
-//! - Authenticates automatically during makePayments or verifyingPayments
+//! - Authenticates automatically during make_payments or verifyingPayments
 //! 
 
 #![allow(dead_code, unused_variables, non_snake_case, non_camel_case_types)]
@@ -41,6 +41,8 @@ use reqwest::header::CONTENT_TYPE;
 /// This module handles http request verifications
 use super::shurjopay_client;//::{HttpResponse,is_response_valid};
 
+// to redirect to payment link
+use webbrowser;
 
 /// Shurjopay token authorization data structure
 /// This structure implements `Serialize`, `Deserialize`, `Debug` and `Clone` functions
@@ -410,7 +412,7 @@ impl ShurjopayPlugin{
 
     /// This function can only be called once
     /// This function automatically authenticates if requires
-    pub fn verifyPayment(&mut self, order_id: Option<String>)-> Option<SpVerifyResponse> {
+    pub fn verify_payment(&mut self, order_id: Option<String>)-> Option<SpVerifyResponse> {
         if let Some(_) = self.verify_auth_token()
         {
             if order_id.is_some()
@@ -428,8 +430,22 @@ impl ShurjopayPlugin{
     }
 
     /// This function automatically authenticates and commits secure checkout
+    /// Automatic redirect to payment link
     /// It takes `SpCheckout` Struct as input
-    pub fn MakePayment(&mut self, checkout_item: SpCheckout)->Option<String> {
+    /// return checkout_url
+    pub fn make_payment(&mut self, checkout_item: SpCheckout)->Option<String> {
+        let checkout_url = self.make_payment_no_auto_redirect(checkout_item);
+
+        if webbrowser::open(checkout_url.clone().unwrap().as_str()).is_ok() {
+            println!("Opened '{}' successfully.", checkout_url.clone().unwrap());
+        }
+        return checkout_url.clone();
+    }
+
+    /// This function automatically authenticates and commits secure checkout
+    /// It takes `SpCheckout` Struct as input
+    /// return checkout_url
+    pub fn make_payment_no_auto_redirect(&mut self, checkout_item: SpCheckout)->Option<String> {
         if let Some(_) = self.verify_auth_token()
         {
             let auth_token_val = self.auth_token.clone().unwrap();

@@ -43,14 +43,11 @@ sp-plugin-rust-test = "0.1.0"
 ```toml
 [dependencies]
 sp-plugin-rust-test = "0.1.0"
-open = "3.0.3"
 ```
 
 ### step:2  Import Crate into your project
 ```
 use sp_plugin_rust_test::Shurjopay::ShurjopayPlugin;
-use open;
-use std::io;
 ```
 ### step:3  creating a new instance of Shurjopayplugin
 ```
@@ -61,7 +58,29 @@ let mut sp_instance = ShurjopayPlugin::new();
 
 you can configure ShurjopayPlugin two ways
 
-* option1: Configure plugin using this function
+* option1: configure plugin using .env file
+```
+sp_instance.set_config_from_env_file();
+```
+in this way you need to configure .env file in this way.
+
+*** keep the .toml and .evn file in the same directiory *** 
+
+```
+# .env
+SP_USER="sp_sandbox"
+SP_PASS="pyyk97hu&6u6"
+POST_DEFAULT_ADDRESS="https://sandbox.shurjopayment.com"
+TOKEN_END_POINT="/api/get_token"
+SECURE_PAYMENT_END_POINT="/api/secret-pay"
+VERIFICATION_END_POINT="/api/verification"
+PAYMENT_STATUS_END_POINT="/api/payment-status"
+DEFAULT_RETURN_URL="https://sandbox.shurjopayment.com/response"
+DEFAULT_CANCEL_URL="https://sandbox.shurjopayment.com/response"
+```
+
+
+* option2: Configure plugin using this function
 ```
 sp_instance.set_all_config(
         "sp_sandbox".to_string(),
@@ -73,63 +92,34 @@ sp_instance.set_all_config(
         "/api/payment-status".to_string(),
         "https://www.sandbox.shurjopayment.com/response".to_string(),
         "https://www.sandbox.shurjopayment.com/response".to_string(),
-        "192.168.0.99".to_string(),);
-```
-
-* option2: configure plugin using .env file
-```
-sp_instance.set_config_from_env_file();
-```
-in this way you need to configure .env file in this way.
-
-*** keep the .toml and .evn file in the same directiory *** 
-
-```
-// .env
-POST_DEFAULT_ADDRESS="https://sandbox.shurjopayment.com"
-TOKEN_END_POINT="/api/get_token"
-SECURE_PAYMENT_END_POINT="/api/secret-pay"
-VERIFICATION_END_POINT="/api/verification"
-PAYMENT_STATUS_END_POINT="/api/payment-status"
-SP_USER="sp_sandbox"
-SP_PASS="pyyk97hu&6u6"
-DEFAULT_RETURN_URL="https://www.sandbox.shurjopayment.com/response"
-DEFAULT_CANCEL_URL="https://www.sandbox.shurjopayment.com/response"
-DEFAULT_CLIENT_IP="192.168.0.99"
+        );
 ```
 
 ## Make Payment
-### step:5 To intiate make payment fisrt you need configure payment request object using the following function and pass the object into MakePayment() function
+### step:5 To intiate make payment fisrt you need configure payment request object using the following function and pass the object into make_payment_no_auto_redirect() function
 ```
 let payment_req_obj = sp_instance.make_payment_request_object(
-    "786".to_string(),
-    "abc123".to_string(),
-    "BDT".to_string(),
-    "Mahmudul Islam".to_string(),
-    "Dhaka".to_string(),
-    "01811177722".to_string(),
-    "Dhaka".to_string(),
-    "1203".to_string(),
+    "786".to_string(),              // amount
+    "abc123".to_string(),           // order_id
+    "BDT".to_string(),              // currency
+    "Mahmudul Islam".to_string(),   // customer_name
+    "Dhaka".to_string(),            // customer_address
+    "01811177722".to_string(),      // customer_phone
+    "Dhaka".to_string(),            // customer_city
+    "1203".to_string(),             // customer_post_code
     );
 ```
 
 
 ```
-if let Some(checkout_url) = sp_instance.MakePayment(payment_req_obj) 
-{
-		// opeing the returned checkout url in the default browser 
-		match open::that(checkout_url.clone()) {
-				Ok(()) => {
-				},
-				Err(err) => eprintln!("An error occurred when opening '{}': {}", checkout_url, err),
-		}
+let checkout_url = sp_instance.make_payment(payment_req_obj) 
 ```
 
 
 ## Verify Payment
 ### step:6 to verify payment you need use this function
 ```
-let response = sp_instance.verifyPayment(Some("sp63935da67dfd3".to_string()));
+let response = sp_instance.verify_payment(Some("sp63935da67dfd3".to_string()));
 println!("verify Payment Response:  {:?}",response);
 if response.is_some()
 {

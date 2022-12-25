@@ -4,7 +4,7 @@
 //! 
 //! This module:
 //! - Automatic handles html errors
-//! - Authenticates automatically during makePayments or verifyingPayments
+//! - Authenticates automatically during make_payments or verifyingPayments
 //! 
 
 /// The `log` crate is included to export log for debug purpose
