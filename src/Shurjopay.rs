@@ -42,7 +42,7 @@ use reqwest::header::CONTENT_TYPE;
 use super::shurjopay_client;//::{HttpResponse,is_response_valid};
 
 // to redirect to payment link
-use webbrowser;
+// use webbrowser;
 
 /// Shurjopay token authorization data structure
 /// This structure implements `Serialize`, `Deserialize`, `Debug` and `Clone` functions
@@ -436,9 +436,9 @@ impl ShurjopayPlugin{
     pub fn make_payment(&mut self, checkout_item: SpCheckout)->Option<String> {
         let checkout_url = self.make_payment_no_auto_redirect(checkout_item);
 
-        if webbrowser::open(checkout_url.clone().unwrap().as_str()).is_ok() {
-            println!("Opened '{}' successfully.", checkout_url.clone().unwrap());
-        }
+        // if webbrowser::open(checkout_url.clone().unwrap().as_str()).is_ok() {
+        //     println!("Opened '{}' successfully.", checkout_url.clone().unwrap());
+        // }
         return checkout_url.clone();
     }
 
