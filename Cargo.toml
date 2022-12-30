@@ -1,6 +1,6 @@
 [package]
 name = "sp-plugin-rust-test"
-version = "0.3.4"
+version = "0.3.5"
 edition = "2021"
 authors = ["Shakil Anwar <shakil7531@gmail.com>", "Mahmudul Islam <mahmudulislam299@gmail.com>"]
 categories = ["encoding", "parser-implementations", "no-std"]

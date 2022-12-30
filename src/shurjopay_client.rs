@@ -14,7 +14,7 @@
 
 /// The `reqwest` crate is included to make http request
 // extern crate reqwest;
-use reqwest::{blocking::Response, Error};
+// use reqwest::{blocking::Response, Error};
 // use reqwest::Error;
 // use reqwest::header::{HeaderMap, HeaderValue, USER_AGENT, CONTENT_TYPE};
 
@@ -26,7 +26,7 @@ pub struct HttpResponse{
 
 
 
-pub fn is_response_valid(res: Result<Response, Error>) -> Option<HttpResponse>
+pub fn is_response_valid(res: Result<reqwest::blocking::Response, reqwest::Error>) -> Option<HttpResponse>
 {
 
     match res {

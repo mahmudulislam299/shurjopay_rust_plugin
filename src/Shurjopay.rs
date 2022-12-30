@@ -33,7 +33,7 @@ use serde_json:: Result;
 
 /// The `reqwest` crate is included to make http request
 // extern crate reqwest;
-use reqwest::blocking::Client;
+// use reqwest::blocking::Client;
 // use reqwest::Error;
 // use reqwest::header::{HeaderMap, HeaderValue, USER_AGENT, CONTENT_TYPE};
 use reqwest::header:: CONTENT_TYPE;
@@ -233,7 +233,7 @@ impl Default for SpConfig
 /// 
 #[derive(Debug, Clone)]
 pub struct ShurjopayPlugin{
-    client: Option<Client>,
+    client: Option<reqwest::blocking::Client>,
     pub config: Option<SpConfig>,
     pub auth_token: Option<SpAuthToken>,
     pub checkout_response: Option<SpCheckoutResponse>,
@@ -254,7 +254,7 @@ impl ShurjopayPlugin {
     /// This is a constructor to initiate `null` instance of `ShurjopayPlugin`
     /// returns `ShurjopayPlugin`
     pub fn new() -> Self {
-        let http_client = Client::new();
+        let http_client = reqwest::blocking::Client::new();
         ShurjopayPlugin{            
             client : Some(http_client),
             config : None,
