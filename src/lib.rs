@@ -19,6 +19,7 @@
 
 pub mod shurjopay;
 pub mod shurjopay_client;
+pub mod shurjopay_async_client;
 
 
 

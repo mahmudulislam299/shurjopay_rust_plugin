@@ -40,6 +40,7 @@ use reqwest::header:: CONTENT_TYPE;
 
 /// This module handles http request verifications
 use super::shurjopay_client;//::{HttpResponse,is_response_valid};
+use super::shurjopay_async_client::get_async;
 
 // to redirect to payment link
 // use webbrowser;
@@ -326,12 +327,13 @@ impl ShurjopayPlugin {
 
 
     /// Using this ShurjopayPlugin config can be set from .env file
-    pub fn set_config_from_env_file(&mut self)
+    pub async fn set_config_from_env_file(&mut self)
     {
         if check_env_file_availble()
         {
             
-            let ip_address_check = self.get_client_ip_address();
+            // let ip_address_check = self.get_client_ip_address();
+            let ip_address_check = self.get_client_ip_address_async().await;
             
             let mut ip_address = "0.0.0.0".to_string();
             
@@ -720,6 +722,43 @@ impl ShurjopayPlugin{
                     // println!("ip address: {:#?}", result.clone().unwrap().ip);
                     return Some(result.unwrap().ip);
 
+                }
+            } 
+            else 
+            {
+                println!("Shurjopay http client is not set yet!");
+            }            
+        return None;
+    }
+
+
+     /// This function gets IP address of the client
+    /// It returns `Option<String>`
+    pub async fn get_client_ip_address_async(&mut self) -> Option<String> 
+    {
+        let sp_ins = self.clone();
+
+            if let Some(client) = sp_ins.client
+            {
+                let url = format!("https://api.ipify.org/?format=json");
+
+                // Making HTTP request
+                let result = get_async(url).await;
+
+                // Checking if respons is valid or not
+                match result
+                {
+                    Ok(response_string) =>
+                    {
+                        println!("got async ip {:#?}", response_string); 
+                        let result_ip:Result<IpAddress> = serde_json::from_str(response_string.as_str());
+                        // println!("got ip address: {:#?}", result_ip.clone().unwrap().ip);
+                        return Some(result_ip.unwrap().ip);
+                    },
+                    Err(_) =>
+                    {
+                        println!("check the url of get ip address");
+                    }
                 }
             } 
             else 

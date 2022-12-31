@@ -103,12 +103,7 @@ mod tests {
 
         if let Some(checkout_url) = sp_instance.make_payment_no_auto_redirect(payment_req_obj) {
             
-            // if webbrowser::open(checkout_url.clone().as_str()).is_ok() {
-            //     println!("Opened '{}' successfully.", checkout_url.clone())
-            // }
-            // else {
-            //     println!("An error occurred when opening {}", checkout_url);
-            // }
+            println!("Opened '{}' successfully.", checkout_url.clone());
         }
     }
 
@@ -151,5 +146,20 @@ mod tests {
         }
 
     }
+
+//     #[tokio::test]
+//     // #[actix_rt::test]
+//     async fn get_ip_address_async_test()
+//     {
+//        let mut sp_instance = ShurjopayPlugin::new();
+//        sp_instance.set_default_config();
+
+//        sp_instance.get_client_ip_address_async().await;
+    
+//        let p = 10;
+//        assert_eq!(p, 10);
+
+
+//    }
     
 }
